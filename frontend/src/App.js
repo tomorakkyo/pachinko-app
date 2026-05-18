@@ -14,7 +14,7 @@ function App() {
   // バックエンドからこれまでのデータを取得する
   const fetchRecords = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/records');
+      const res = await fetch('https://pachinko-app-r7jd.onrender.com/api/records');
       const data = await res.json();
       setRecords(data);
     } catch (err) {
@@ -34,7 +34,7 @@ function App() {
     const formattedDate = selectedDate.toISOString().split('T')[0];
     
     try {
-      await fetch('http://127.0.0.1:8000/api/records', {
+      await fetch('https://pachinko-app-r7jd.onrender.com/api/records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
