@@ -18,8 +18,8 @@ app.add_middleware(
 )
 
 # ⚠️ 【重要】ここをご自身の情報に必ず書き換えてください！
-SUPABASE_URL = "あなたのSupabaseのProject URL"
-SUPABASE_KEY = "あなたのSupabaseのanonキー"
+SUPABASE_URL = "https://qerfyxzrxporqkquwzxg.supabase.co/rest/v1/"
+SUPABASE_KEY = "sb_publishable_L5N9XZG9tO8pjlLyGQ5-rQ_YnLWoHAa"
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1505877167169343609/_dgQPU0jnYG5s3PRq1z6eLgNXOqOzwMlafqKoeb0S-PzNtZ8UE_d6V0nZ4LBM_lsMUQm"
 
 # Supabase金庫と接続する設定
