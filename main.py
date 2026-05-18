@@ -17,9 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ⚠️ 【重要】ここをご自身の情報に必ず書き換えてください！
+# ⚠️ 【超重要】ここをご自身のSupabase情報に必ず書き換えてください！
+# （※消してしまっているとエラーになります）
 SUPABASE_URL = "https://qerfyxzrxporqkquwzxg.supabase.co/rest/v1/"
 SUPABASE_KEY = "sb_publishable_L5N9XZG9tO8pjlLyGQ5-rQ_YnLWoHAa"
+
+# ↓ いただいた新しいDiscordのWebhook URL（設定済みです！）
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1505877167169343609/_dgQPU0jnYG5s3PRq1z6eLgNXOqOzwMlafqKoeb0S-PzNtZ8UE_d6V0nZ4LBM_lsMUQm"
 
 # Supabase金庫と接続する設定
@@ -65,10 +68,10 @@ def create_record(record: Record):
         "balance": balance
     }
     
-    # 【変更】データをSupabase金庫に直接保存（インサート）する
+    # データをSupabase金庫に直接保存（インサート）する
     supabase.table("records").insert(new_data).execute()
     
-    # 【変更】最新の集計をするために、Supabase金庫からすべてのデータを一度取り出す
+    # 最新の集計をするために、Supabase金庫からすべてのデータを一度取り出す
     response = supabase.table("records").select("*").execute()
     all_records = response.data
     
@@ -88,6 +91,6 @@ def create_record(record: Record):
 
 @app.get("/api/records")
 def get_records():
-    # 【変更】画面を開いたときは、Supabase金庫から全データを持ってきてフロントに渡す
+    # 画面を開いたときは、Supabase金庫から全データを持ってきてフロントに渡す
     response = supabase.table("records").select("*").execute()
     return response.data
