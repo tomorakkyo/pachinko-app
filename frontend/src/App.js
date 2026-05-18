@@ -85,7 +85,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto', fontFamily: 'sans-serif' }}>
-      <h2>パチンコ収支管理 (共有版)</h2>
+      <h2>パチンコ収支管理</h2>
       
       {/* 収支表示エリア */}
       <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
