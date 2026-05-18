@@ -53,8 +53,17 @@ function App() {
     }
   };
 
-  // 全体の総収支を計算
+  // 【全体の総収支を計算】
   const totalBalance = records.reduce((sum, r) => sum + r.balance, 0);
+
+  // 【★新機能：メンバーごとの通算収支を自動でグループ分けして計算】
+  const userBalances = records.reduce((acc, r) => {
+    if (!acc[r.user_name]) {
+      acc[r.user_name] = 0;
+    }
+    acc[r.user_name] += r.balance;
+    return acc;
+  }, {});
 
   // カレンダーの日付マスに収支を表示するための関数
   const tileContent = ({ date, view }) => {
@@ -78,8 +87,28 @@ function App() {
     <div style={{ padding: '20px', maxWidth: '500px', margin: '0 auto', fontFamily: 'sans-serif' }}>
       <h2>パチンコ収支管理 (共有版)</h2>
       
+      {/* 収支表示エリア */}
       <div style={{ background: '#f0f0f0', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
-        <h3>🏆 通算総収支: <span style={{ color: totalBalance >= 0 ? 'blue' : 'red' }}>{totalBalance.toLocaleString()} 円</span></h3>
+        <h3 style={{ margin: '0 0 10px 0' }}>🏆 全体の通算総収支: <span style={{ color: totalBalance >= 0 ? 'blue' : 'red' }}>{totalBalance.toLocaleString()} 円</span></h3>
+        
+        <hr style={{ border: '0', borderTop: '1px solid #ccc', margin: '15px 0' }} />
+        
+        {/* ★新機能：個人別の収支一覧をここに表示 */}
+        <h4 style={{ margin: '0 0 10px 0', color: '#333' }}>👤 メンバーごとの通算収支:</h4>
+        {Object.keys(userBalances).length === 0 ? (
+          <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>まだデータがありません</p>
+        ) : (
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {Object.entries(userBalances).map(([name, balance]) => (
+              <li key={name} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px dashed #eee' }}>
+                <span><strong>{name}</strong> さん</span>
+                <span style={{ color: balance >= 0 ? 'blue' : 'red', fontWeight: 'bold' }}>
+                  {balance >= 0 ? `+${balance.toLocaleString()}` : balance.toLocaleString()} 円
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} style={{ marginBottom: '30px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
