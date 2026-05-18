@@ -20,7 +20,7 @@ app.add_middleware(
 # ⚠️ 【超重要】ここをご自身のSupabase情報に必ず書き換えてください！
 # （※消してしまっているとエラーになります）
 SUPABASE_URL = "https://qerfyxzrxporqkquwzxg.supabase.co/rest/v1/"
-SUPABASE_KEY = "sb_publishable_L5N9XZG9tO8pjlLyGQ5-rQ_YnLWoHAa"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlcmZ5eHpyeHBvcnFrcXV3enhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTM5OTYsImV4cCI6MjA5NDY2OTk5Nn0.YHSJKbn7TawyUTTExbnvlIoD7cLiC5cpLeBK279p39c"
 
 # ↓ いただいた新しいDiscordのWebhook URL（設定済みです！）
 DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1505877167169343609/_dgQPU0jnYG5s3PRq1z6eLgNXOqOzwMlafqKoeb0S-PzNtZ8UE_d6V0nZ4LBM_lsMUQm"
