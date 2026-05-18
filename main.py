@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from datetime import date
 import requests
+from supabase import create_client, Client
 
 app = FastAPI()
 
@@ -16,8 +17,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ⚠️ DiscordのWebhook URLをここに必ず貼り付けてください
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1505829735706525776/4O_ergSWnOHL6UyDwCXI25cQd3u21L-tY1721beN-uirxXG9ABBjJX-74abcGSJULzMy"
+# ⚠️ 【重要】ここをご自身の情報に必ず書き換えてください！
+SUPABASE_URL = "あなたのSupabaseのProject URL"
+SUPABASE_KEY = "あなたのSupabaseのanonキー"
+DISCORD_WEBHOOK_URL = "# main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from datetime import date
+import requests
+from supabase import create_client, Client
+
+app = FastAPI()
+
+# フロントエンドからの通信を許可する設定
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ⚠️ 【重要】ここをご自身の情報に必ず書き換えてください！
+SUPABASE_URL = "あなたのSupabaseのProject URL"
+SUPABASE_KEY = "あなたのSupabaseのanonキー"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1505877167169343609/_dgQPU0jnYG5s3PRq1z6eLgNXOqOzwMlafqKoeb0S-PzNtZ8UE_d6V0nZ4LBM_lsMUQm"
+
+# Supabase金庫と接続する設定
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 class Record(BaseModel):
     user_name: str
@@ -25,9 +53,7 @@ class Record(BaseModel):
     investment: int
     income: int
 
-db_records = []
-
-# 通知用の関数（今月の収支と通算収支を受け取れるように機能追加）
+# Discord通知用の関数
 def send_to_discord(user_name, investment, income, balance, monthly_balance, total_balance, record_date):
     icon = "📈" if balance >= 0 else "📉"
     monthly_icon = "🔵" if monthly_balance >= 0 else "🔴"
@@ -50,37 +76,110 @@ def send_to_discord(user_name, investment, income, balance, monthly_balance, tot
 
 @app.post("/api/records")
 def create_record(record: Record):
-    # 1日の収支計算
     balance = record.income - record.investment
+    
+    # Supabaseに保存する形にデータを整える
     new_data = {
-        "id": len(db_records) + 1,
         "user_name": record.user_name,
         "date": record.date.isoformat(),
         "investment": record.investment,
         "income": record.income,
         "balance": balance
     }
-    # データベース(配列)に保存
-    db_records.append(new_data)
     
-    # --- ここから追加：個人の集計を計算する ---
+    # 【変更】データをSupabase金庫に直接保存（インサート）する
+    supabase.table("records").insert(new_data).execute()
     
-    # 1. このユーザーの全記録だけを取り出す
-    user_records = [r for r in db_records if r["user_name"] == record.user_name]
+    # 【変更】最新の集計をするために、Supabase金庫からすべてのデータを一度取り出す
+    response = supabase.table("records").select("*").execute()
+    all_records = response.data
     
-    # 2. このユーザーの通算収支を計算
+    # このユーザーの全記録だけを絞り込んで計算
+    user_records = [r for r in all_records if r["user_name"] == record.user_name]
     total_balance = sum(r["balance"] for r in user_records)
     
-    # 3. このユーザーの今月の記録だけをさらに取り出して計算
-    target_month_prefix = f"{record.date.year}-{record.date.month:02d}" # 例: "2026-05"
+    # このユーザーの今月の記録だけを絞り込んで計算
+    target_month_prefix = f"{record.date.year}-{record.date.month:02d}"
     monthly_records = [r for r in user_records if r["date"].startswith(target_month_prefix)]
     monthly_balance = sum(r["balance"] for r in monthly_records)
     
-    # Discordへ通知（計算した結果も渡す）
+    # Discordへ通知
     send_to_discord(record.user_name, record.investment, record.income, balance, monthly_balance, total_balance, record.date)
     
     return new_data
 
 @app.get("/api/records")
 def get_records():
-    return db_records
+    # 【変更】画面を開いたときは、Supabase金庫から全データを持ってきてフロントに渡す
+    response = supabase.table("records").select("*").execute()
+    return response.data"
+
+# Supabase金庫と接続する設定
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+class Record(BaseModel):
+    user_name: str
+    date: date
+    investment: int
+    income: int
+
+# Discord通知用の関数
+def send_to_discord(user_name, investment, income, balance, monthly_balance, total_balance, record_date):
+    icon = "📈" if balance >= 0 else "📉"
+    monthly_icon = "🔵" if monthly_balance >= 0 else "🔴"
+    total_icon = "🏆" if total_balance >= 0 else "💀"
+    
+    content = (
+        f"📢 **{user_name}** さんが収支を記録しました！\n"
+        f"📅 日付: {record_date.strftime('%Y/%m/%d')}\n"
+        f"💸 投資: {investment:,}円\n"
+        f"💰 回収: {income:,}円\n"
+        f"{icon} **本日の収支: {balance:,}円**\n"
+        f"---\n"
+        f"{monthly_icon} **今月({record_date.month}月)の収支: {monthly_balance:,}円**\n"
+        f"{total_icon} **通算収支: {total_balance:,}円**"
+    )
+    try:
+        requests.post(DISCORD_WEBHOOK_URL, json={"content": content})
+    except Exception as e:
+        print(f"Discord通知エラー: {e}")
+
+@app.post("/api/records")
+def create_record(record: Record):
+    balance = record.income - record.investment
+    
+    # Supabaseに保存する形にデータを整える
+    new_data = {
+        "user_name": record.user_name,
+        "date": record.date.isoformat(),
+        "investment": record.investment,
+        "income": record.income,
+        "balance": balance
+    }
+    
+    # 【変更】データをSupabase金庫に直接保存（インサート）する
+    supabase.table("records").insert(new_data).execute()
+    
+    # 【変更】最新の集計をするために、Supabase金庫からすべてのデータを一度取り出す
+    response = supabase.table("records").select("*").execute()
+    all_records = response.data
+    
+    # このユーザーの全記録だけを絞り込んで計算
+    user_records = [r for r in all_records if r["user_name"] == record.user_name]
+    total_balance = sum(r["balance"] for r in user_records)
+    
+    # このユーザーの今月の記録だけを絞り込んで計算
+    target_month_prefix = f"{record.date.year}-{record.date.month:02d}"
+    monthly_records = [r for r in user_records if r["date"].startswith(target_month_prefix)]
+    monthly_balance = sum(r["balance"] for r in monthly_records)
+    
+    # Discordへ通知
+    send_to_discord(record.user_name, record.investment, record.income, balance, monthly_balance, total_balance, record.date)
+    
+    return new_data
+
+@app.get("/api/records")
+def get_records():
+    # 【変更】画面を開いたときは、Supabase金庫から全データを持ってきてフロントに渡す
+    response = supabase.table("records").select("*").execute()
+    return response.data
