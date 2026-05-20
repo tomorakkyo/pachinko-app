@@ -1,0 +1,3 @@
+anon key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlcmZ5eHpyeHBvcnFrcXV3enhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTM5OTYsImV4cCI6MjA5NDY2OTk5Nn0.YHSJKbn7TawyUTTExbnvlIoD7cLiC5cpLeBK279p39c
+
+project URL:https://qerfyxzrxporqkquwzxg.supabase.co/rest/v1/
