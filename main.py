@@ -23,7 +23,7 @@ SUPABASE_URL = "https://qerfyxzrxporqkquwzxg.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlcmZ5eHpyeHBvcnFrcXV3enhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTM5OTYsImV4cCI6MjA5NDY2OTk5Nn0.YHSJKbn7TawyUTTExbnvlIoD7cLiC5cpLeBK279p39c"
 
 # ↓ いただいた新しいDiscordのWebhook URL（設定済みです！）
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1506515888663298108/N5uMGHRNWYJORO0eL6-jl0gz2NojDKyiTCOlwkuEemlwUm3fYHBdnaw5EpB9rIZRP-bz"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1506587620648550450/hAMU60DiWAEuc-8rGuSmVwrkDt7yi9hl9HEm0ALGbRBZ02IvxxElkdgrmfHAG7hdxKqz"
 
 # Supabase金庫と接続する設定
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
