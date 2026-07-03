@@ -36,7 +36,7 @@ class Record(BaseModel):
     machine_name: str = "未記入"
 
 # Discord通知用の関数
-def send_to_discord(user_name, investment, income, balance, monthly_balance, total_balance, record_date):
+def send_to_discord(user_name, investment, income, balance, monthly_balance, total_balance, record_date, machine_name):
     icon = "📈" if balance >= 0 else "📉"
     monthly_icon = "🔵" if monthly_balance >= 0 else "🔴"
     total_icon = "🏆" if total_balance >= 0 else "💀"
