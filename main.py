@@ -33,6 +33,7 @@ class Record(BaseModel):
     date: date
     investment: int
     income: int
+    machine_name: str = "未記入"
 
 # Discord通知用の関数
 def send_to_discord(user_name, investment, income, balance, monthly_balance, total_balance, record_date):
@@ -43,6 +44,7 @@ def send_to_discord(user_name, investment, income, balance, monthly_balance, tot
     content = (
         f"📢 **{user_name}** さんが収支を記録しました！\n"
         f"📅 日付: {record_date.strftime('%Y/%m/%d')}\n"
+        f"🎰 機種: {machine_name}\n"    
         f"💸 投資: {investment:,}円\n"
         f"💰 回収: {income:,}円\n"
         f"{icon} **本日の収支: {balance:,}円**\n"
@@ -85,7 +87,7 @@ def create_record(record: Record):
     monthly_balance = sum(r["balance"] for r in monthly_records)
     
     # Discordへ通知
-    send_to_discord(record.user_name, record.investment, record.income, balance, monthly_balance, total_balance, record.date)
+    send_to_discord(record.user_name, record.investment, record.income, balance, monthly_balance, total_balance, record.date, record.machine_name)
     
     return new_data
 

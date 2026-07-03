@@ -8,6 +8,7 @@ function App() {
   const [records, setRecords] = useState([]);
   const [userName, setUserName] = useState('');
   const [investment, setInvestment] = useState('');
+  const [machineName, setMachineName] = useState('');
   const [income, setIncome] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -42,11 +43,13 @@ function App() {
           date: formattedDate,
           investment: parseInt(investment),
           income: parseInt(income)
+          machine_name: machineName || "未記入"
         })
       });
       alert("記録しました！Discordを確認してください。");
       setInvestment('');
       setIncome('');
+      setMachineName('');
       fetchRecords(); // データを再読み込み
     } catch (err) {
       alert("送信に失敗しました");
@@ -115,6 +118,9 @@ function App() {
         <h3>【収支を入力】</h3>
         <label>メンバー名:
           <input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} style={{ width: '100%', padding: '8px' }} placeholder="例: たろう" />
+        </label>
+        <label>打った台（任意）:
+          <input type="text" value={machineName} onChange={(e) => setMachineName(e.target.value)} style={{ width: '100%', padding: '8px' }} placeholder="例: エヴァ15" />
         </label>
         <label>投資 (円):
           <input type="number" value={investment} onChange={(e) => setInvestment(e.target.value)} style={{ width: '100%', padding: '8px' }} />
