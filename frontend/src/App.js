@@ -42,7 +42,7 @@ function App() {
           user_name: userName,
           date: formattedDate,
           investment: parseInt(investment),
-          income: parseInt(income)
+          income: parseInt(income),
           machine_name: machineName || "未記入"
         })
       });
