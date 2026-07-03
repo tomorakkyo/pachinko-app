@@ -41,11 +41,11 @@ Bash
 pip install -r requirements.txt
 main.py 内の以下の環境変数をご自身の情報に書き換えてください。
 
-SUPABASE_URL: SupabaseのプロジェクトURL
+SUPABASE_URL:https://qerfyxzrxporqkquwzxg.supabase.co
 
-SUPABASE_KEY: Supabaseのanon key
+SUPABASE_KEY:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlcmZ5eHpyeHBvcnFrcXV3enhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTM5OTYsImV4cCI6MjA5NDY2OTk5Nn0.YHSJKbn7TawyUTTExbnvlIoD7cLiC5cpLeBK279p39c
 
-DISCORD_WEBHOOK_URL: DiscordのWebhook URL
+DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/1506587620648550450/hAMU60DiWAEuc-8rGuSmVwrkDt7yi9hl9HEm0ALGbRBZ02IvxxElkdgrmfHAG7hdxKqz
 
 サーバーを起動します。
 
